@@ -34,9 +34,13 @@ New features
   ``arranger`` fields. Existing libraries are migrated automatically, and
   :doc:`plugins/musicbrainz` now preserves each MusicBrainz ``remixer``,
   ``lyricist``, ``composer``, and ``arranger`` relation as a separate value.
-  :bug:`5698`
 - :doc:`plugins/replaygain`: Conflicting replay gain tags are now removed on
   write. RG_* tags are removed when setting R128_* and vice versa.
+- :doc:`plugins/discogs`: Import Discogs remixer, lyricist, composer, and
+  arranger credits into the multi-value ``remixers``, ``lyricists``,
+  ``composers``, and ``arrangers`` fields. Featuring credits are also kept out
+  of the main artist and artist ID fields so contributor roles do not replace
+  the primary release artist. :bug:`6380`
 
 Bug fixes
 ~~~~~~~~~
