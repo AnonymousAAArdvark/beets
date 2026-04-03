@@ -246,18 +246,13 @@ class RelativePathMigration(Migration):
 
         migrated = total - len(to_migrate)
         ui.print_(f"Migrating {field} for {total} {table}...")
-        for batch in chunks(to_migrate, self.CHUNK_SIZE):
-            with self.db.transaction() as tx:
-                tx.mutate_many(
-                    f"UPDATE {table} SET {field} = ? WHERE id = ?",
-                    [(normalize_path_for_db(r[field]), r["id"]) for r in batch],
-                )
-
-            migrated += len(batch)
-
-            ui.print_(
-                f"  Migrated {migrated} {table} "
-                f"({migrated}/{total} processed)..."
+        with self.db.transaction() as tx:
+            tx.mutate_many(
+                f"UPDATE {table} SET {field} = ? WHERE id = ?",
+                [
+                    (normalize_path_for_db(r[field]), r["id"])
+                    for r in to_migrate
+                ],
             )
 
         ui.print_(f"Migration complete: {migrated} of {total} {table} updated")
